@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zuzzy ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #ffd1dc, #ff9a9e, #fecfef);
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4a4a4a;
+            text-align: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .floating-music-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #fff;
+            border: 2px solid #ff85a2;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 24px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 133, 162, 0.7); }
+            70% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(255, 133, 162, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 133, 162, 0); }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+            border: 2px dashed #ff85a2;
+            max-width: 420px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 30px;
+        }
+
+        h1 { font-size: 26px; margin-bottom: 15px; color: #ff416c; }
+
+        .grid-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border: 2px dashed #ffb6c1;
+            border-radius: 18px;
+            height: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            display: none;
+        }
+
+        .lock-content { font-size: 16px; color: #888; }
+
+        .section-box {
+            background: #fff;
+            border: 2px dashed #ffb6c1;
+            border-radius: 18px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        p { font-size: 14px; line-height: 1.7; text-align: right; color: #555; }
+
+        input[type="password"] {
+            width: 85%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 12px;
+            border: 1px solid #ffb6c1;
+            background: #fff5f7;
+            text-align: center;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            font-size: 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: bold;
+        }
+
+        .error { color: #e63946; font-size: 12px; margin-top: 8px; display: none; }
+        #messageBox { display: none; }
+
+        .floating-emoji {
+            position: fixed;
+            font-size: 24px;
+            animation: riseUp 2s ease-out forwards;
+            z-index: 3000;
+            pointer-events: none;
+        }
+
+        @keyframes riseUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- مشغل الصوت المباشر الآمن -->
+    <audio id="bgMusic" loop>
+        <source src="https://archive.org/download/MassarEgbariFakra/Massar%20Egbari%20-%20Fakra.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="floating-music-btn" onclick="toggleMusic()" title="تشغيل / إيقاف الأغنية">🎵</div>
+
+    <div class="container">
+        <h1>Zuzzy ❤️</h1>
+
+        <div class="grid-box">
+            <div class="card" id="card1">
+                <div class="lock-content" id="lock1">🔒 1</div>
+                <img id="img1" src="https://i.postimg.cc/0QXsCVRB/68e4a264-0ade-4550-a51e-dbc399efead1.jpg" alt="Photo 1">
+            </div>
+            <div class="card" id="card2">
+                <div class="lock-content" id="lock2">🔒 2</div>
+                <img id="img2" src="https://i.postimg.cc/JnYLQpVv/93a53682-65f1-4939-aa80-423afabae594.jpg" alt="Photo 2">
+            </div>
+        </div>
+
+        <div class="section-box" id="passSection">
+            <p style="text-align: center; color: #ff416c; font-weight: bold;">اكتب الباسورد عشان تفتح رسالتك الخاصة 💌🔐</p>
+            <input type="password" id="passInput" placeholder="اكتب الباسورد هنا...">
+            <br>
+            <button class="btn" onclick="unlockSurprise()">افتح المفاجأة 🎂</button>
+            <div id="errorMsg" class="error">الباسورد غلط، جرب تاني!</div>
+        </div>
+
+        <div class="section-box" id="messageBox">
+            <p>
+                أنا لو بعتلك اللي أنا بعمله دلوقتي دا اعرف إنك اتفشخت لحد ما عرفت أعمله 😂 بس حقيقي فداك، أنا حاولت أن يكون حلو على قد ما أقدر وحاولت أعملك حاجة مختلفة معملتهاش قبل كدا ومظنش إن حد عملهالك قبل كدا، ودي أقل حاجة أعرف أعملها علشانك، ومهما حاولت أعمل هفضل شايفه إنه حقيقي قليل في حقك برضو. 
+                <br><br>
+                بحبك أوي يا زياد، شكراً على كل اللي عملته وبتعملوه معايا من يوم ما عرفتك، مش عارفه اتخيل آخر سنة من حياتي دي كانت هتبق عاملة ازاي من غيرك، بس المتأكدة منه إني مكنتش هبق زي ما أنا دلوقتي خالص. وبغض النظر عن كل اللي أنت عملته معايا، أنت غيرت فيا حاجات كتير أوي للانضف وللأحسن وأنا عمري ما هنسالك كل دا يا حبيبي. 
+                <br><br>
+                ودا الطبيعي بتاعك يا زياد، أنت لما بتخش حياة أي حد حياته بتنضف وهو شخصياً لازم ينضف علشان يعرف يتعامل معاك. أنا عارفه إنك مش شايف إنك بتعمل أو عملت حاجة، بس حقيقي يا زياد مفيش بني آدم عارفني غير وعارف بجد قدر اللي أنت عملته معايا وقد ايه أنت حقيقي ممتنة لوجودك في حياتي. يمكن من أكبر النعم ربنا مدهاني هو أنت يا زياد وأنك في حياتي، وهفضل أقولك دايماً أنا لو كان حد قالي من سنة إني هكون مع حد بنفس مواصفاتك وبيحبني كدا والله ما كنت هصدقه!
+                <br><br>
+                شكراً إنك عمرك يا زياد ما خليتني في يوم أنام أسأل أنا مش كفاية ليه، شكراً إني عمري ما اضطريت إني lower my standards بسببك، بالعكس أنت بجد بتعليها وأنا عمري ما كنت أتوقع إني هحب كدا من شخص حقيقي بيرفكت زيك. أنا عارفه إني مكنتش أستحقك بس والله يا زياد أنا شايفه دلوقتي إني ممكن أستحقك رغم إني هفضل دايماً شايفه إنك تستاهل أحسن مني بكتير، بس بقيت حاسه إن ربنا بيبعدك عني كل شويه علشان أتعلم حاجه وأكون أحسن علشان أستحقك، وأنا فعلاً دلوقتي أحسن بكتير وهفضل دايماً يا زياد دايماً بحاول أكون أحسن لحد ما أحس إنك مع حد يستحقك بكل المعاني فعلاً.
+                <br><br>
+                شكراً لوجودك وشكراً انك بتديني أسباب دايماً إني معملش أي حاجة في نفسي، وشكراً انك أنت السبب البيخليني أصحى من النوم، شكراً انك أنت السبب إني فعلاً عايشة مبسوطة مش مجرد عايشة وبس، شكراً انك مستحملني، شكرا إني حتى وأنا مش كويسة معاك مشوفتش منك غير كل خير حتى في أكتر وقت أنت كنت فيه كارمني حرفياً مشوفتش منك غير كل خير برضو ودا لو يدل على حاجه يدل على قد ايه أنت حقيقي نضيف.
+                <br><br>
+                خليك متأكد يا زياد إن معداش عليا ولا يوم واحد وحسيت إني ندمانة إني عرفتك أو حسيت حتى إني مش بحبك، أنت الحاجة الوحيدة العُمري ما ندمت عليها وهفضل أدعي ربنا دايماً دايماً إنه يديمك في حياتي علشان أنت حرفياً حياتي يا زياد. ربنا يخليك ليا، بعشقك يا زوزي ❤️
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const correctPassword = "26/7";
+
+        function unlockSurprise() {
+            const userPass = document.getElementById('passInput').value;
+            if (userPass === correctPassword) {
+                document.getElementById('passSection').style.display = 'none';
+                launchEmojis();
+                setTimeout(() => {
+                    document.getElementById('messageBox').style.display = 'block';
+                    document.getElementById('lock1').style.display = 'none';
+                    document.getElementById('img1').style.display = 'block';
+                    document.getElementById('lock2').style.display = 'none';
+                    document.getElementById('img2').style.display = 'block';
+                }, 400);
+
+                var duration = 3 * 1000;
+                var end = Date.now() + duration;
+                (function frame() {
+                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+                    if (Date.now() < end) { requestAnimationFrame(frame); }
+                }());
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            if (music.paused) {
+                music.play().then(() => {
+                    // شغال تمام
+                }).catch(e => {
+                    alert("اضغط مرة كمان عشان تشتغل الأغنية!");
+                });
+            } else {
+                music.pause();
+            }
+        }
+
+        function launchEmojis() {
+            const emojis = ['❤️', '✨', '💖', '🥰', '🎉', '⭐', '💞'];
+            for (let i = 0; i < 25; i++) {
+                const span = document.createElement('div');
+                span.className = 'floating-emoji';
+                span.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                span.style.left = Math.random() * 100 + 'vw';
+                span.style.bottom = '10px';
+                span.style.animationDuration = (Math.random() * 1.5 + 1) + 's';
+                document.body.appendChild(span);
+                setTimeout(() => span.remove(), 2000);
+            }
+        }
+    </script>
+</body>
+</html>
